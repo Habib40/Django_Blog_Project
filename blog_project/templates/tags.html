@@ -1,0 +1,16 @@
+            <!-- Tags Start -->
+            <div class="mb-3">
+                <div class="section-title mb-0">
+                    <h4 class="m-0 text-uppercase font-weight-bold">Tags</h4>
+                </div>
+                <div class="bg-white border border-top-0 p-3">
+                    <div class="row">
+                        {% for tags in categories %}
+                        <div class="col-4 mb-2">  <!-- Adjust the column size as needed -->
+                            <a href="{{tags.get_url}}" class="btn btn-sm btn-outline-secondary w-100">{{tags.name|truncatechars:6}}</a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <!-- Tags End -->

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+{% if request.GET.commands == 'verification' %}
+    <div class="container alert alert-info mx-auto" role="alert" style="max-width: 380px; margin-top: 100px;">
+        Thanks for registration! We have sent a verification email to your email address {{ request.GET.email}}.
+        <br><br>
+        
+        Already have an account? <a href="{% url 'login' %}">Login</a>
+    </div>
+{% else %}
+    <!-- ============================ COMPONENT LOGIN ================================= -->
+    <div class="card mx-auto" style="max-width: 380px; margin-top: 100px;">
+        <div class="card-body">
+            <h4 class="card-title mb-4">Sign in</h4>
+            <form method="post">
+                {% csrf_token %}
+                {% if messages %}
+                    <div class="btn btn-success btn-block">
+                        {% for message in messages %}
+                            <div class="alert">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="form-row">
+                    <div class="col-12 form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" class="form-control">
+                    </div> <!-- form-group// -->
+                    <div class="col-12 form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" class="form-control">
+                    </div> <!-- form-group// -->
+                </div> <!-- form-row// -->
+                <a href="#">
+                    <h6 class="float-right">Forgot Password?</h6>
+                </a>
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
+            </form>
+        </div> <!-- card-body.// -->
+    </div> <!-- card .// -->
+
+    <p class="text-center mt-4">Don't have an account? <a href="{% url 'register' %}">Sign up</a></p>
+    <br><br>
+{% endif %}
+<!-- ============================ COMPONENT LOGIN END.// ================================= -->
+    
+{% endblock %}

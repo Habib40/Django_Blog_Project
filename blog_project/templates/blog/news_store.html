@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+ <!-- News With Sidebar Start -->
+ <div class="container-fluid mt-5 pt-3">
+    <div class="container">
+        <div class="row">
+            
+            <div class="col-lg-8">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="section-title">
+                            {% if category %}
+                                <h4 class="m-0 text-uppercase font-weight-bold">Category: {{ category.name }}</h4>
+                                <h5 class="text-secondary font-weight-medium  text-center">
+                                    {{ count }} item{{ count|pluralize:"s" }} found
+                                </h5> <!-- Show count of items -->
+                                <a class="text-secondary font-weight-medium text-decoration-none" href="{% url 'article_list' %}">View All</a>
+                            {% else %}
+                                <h4 class="m-0 text-uppercase font-weight-bold">All Articles</h4>
+                                <p class="text-secondary font-weight-medium text-decoration-none">{{ total_count }} item{{ total_count|pluralize:"s" }} found</p>  <!-- Show count of items -->
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            {% for article in articles %}
+                                <div class="col-md-6 mb-3"> <!-- Adjust the column size for responsiveness -->
+                                    <div class="position-relative">
+                                        <img class="img-fluid w-100" src="{{ article.image.url }}" style="object-fit: cover; height:250px"> <!-- Ensure you have an image field in your Article model -->
+                                        <div class="bg-white border border-top-0 p-4">
+                                            <div class="mb-2">
+                                                <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="">{{ article.category.name }}</a> <!-- Update with your URL pattern -->
+                                                <a class="text-body" href=""><small>{{ article.published_date|date:"M d, Y" }}</small></a> <!-- Ensure you have a date field -->
+                                            </div>
+                                            <a class="h4 d-block mb-3 text-secondary text-uppercase font-weight-bold" href="{{article.get_url}}">{{ article.title|truncatechars:30 }}</a> <!-- Update with your URL pattern -->
+                                            <p class="m-0">{{ article.excerpt }}</p> <!-- Ensure you have an excerpt field in your Article model -->
+                                        </div>
+                                        <div class="d-flex justify-content-between bg-white border border-top-0 p-4">
+                                            <div class="d-flex align-items-center">
+                                                <img class="rounded-circle mr-2" src="{{ article.author.profile_image.url }}" width="25" height="25" alt=""> <!-- Ensure you have an author image field -->
+                                                <small>{{ article.author.username }}</small> <!-- Update according to your author field -->
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <small class="ml-3"><i class="far fa-eye mr-2"></i>{{ article.views }}</small> <!-- Ensure you have a views field -->
+                                                
+                                                <small class="ml-3"><i class="far fa-comment mr-2"></i>{{ article.comments.count }}</small> <!-- Ensure you have a way to count comments -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% if forloop.counter|divisibleby:2 %}
+                                    </div><div class="row"> <!-- Start a new row after every two articles -->
+                                {% endif %}
+                            {% empty %}
+                                <div class="alert alert-warning">No articles found in this category.</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <!--1st Pagination Section -->
+                    <div class="col-12">
+                        {% if articles.has_other_pages %}
+                            <ul class="pagination justify-content-center">
+                                {% if articles.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link " href="?page={{ articles.previous_page_number }}" data-page="{{ articles.previous_page_number }}">Previous</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#">Previous</a>
+                                    </li>
+                                {% endif %}
+                                
+                                {% for page in articles.paginator.page_range %}
+                                    {% if articles.number == page %}
+                                        <li class="page-item active">
+                                            <a class="page-link" href="#">{{ page }}</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item">
+                                            <a class="page-link " href="?page={{ page }}" data-page="{{ page }}">{{ page }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                
+                                {% if articles.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link " href="?page={{ articles.next_page_number }}" data-page="{{ articles.next_page_number }}">Next</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#">Next</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        {% endif %}
+                    </div> 
+                    <div class="col-lg-12 mb-3">
+                        <a href=""><img class="img-fluid w-100" src="{% static 'img/ads-728x90.png' %}" alt=""></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <!-- Social Follow Start -->
+                <div class="mb-3">
+                    <div class="section-title mb-0">
+                        <h4 class="m-0 text-uppercase font-weight-bold">Follow Us</h4>
+                    </div>
+                    <div class="bg-white border border-top-0 p-3">
+                        <a href="" class="d-block w-100 text-white text-decoration-none mb-3" style="background: #39569E;">
+                            <i class="fab fa-facebook-f text-center py-4 mr-3" style="width: 65px; background: rgba(0, 0, 0, .2);"></i>
+                            <span class="font-weight-medium">12,345 Fans</span>
+                        </a>
+                        <a href="" class="d-block w-100 text-white text-decoration-none mb-3" style="background: #52AAF4;">
+                            <i class="fab fa-twitter text-center py-4 mr-3" style="width: 65px; background: rgba(0, 0, 0, .2);"></i>
+                            <span class="font-weight-medium">12,345 Followers</span>
+                        </a>
+                        <a href="" class="d-block w-100 text-white text-decoration-none mb-3" style="background: #0185AE;">
+                            <i class="fab fa-linkedin-in text-center py-4 mr-3" style="width: 65px; background: rgba(0, 0, 0, .2);"></i>
+                            <span class="font-weight-medium">12,345 Connects</span>
+                        </a>
+                        <a href="" class="d-block w-100 text-white text-decoration-none mb-3" style="background: #C8359D;">
+                            <i class="fab fa-instagram text-center py-4 mr-3" style="width: 65px; background: rgba(0, 0, 0, .2);"></i>
+                            <span class="font-weight-medium">12,345 Followers</span>
+                        </a>
+                        <a href="" class="d-block w-100 text-white text-decoration-none mb-3" style="background: #DC472E;">
+                            <i class="fab fa-youtube text-center py-4 mr-3" style="width: 65px; background: rgba(0, 0, 0, .2);"></i>
+                            <span class="font-weight-medium">12,345 Subscribers</span>
+                        </a>
+                        <a href="" class="d-block w-100 text-white text-decoration-none" style="background: #055570;">
+                            <i class="fab fa-vimeo-v text-center py-4 mr-3" style="width: 65px; background: rgba(0, 0, 0, .2);"></i>
+                            <span class="font-weight-medium">12,345 Followers</span>
+                        </a>
+                    </div>
+                </div>
+                <!-- Social Follow End -->
+                <!-- Ads Start -->
+                <div class="mb-3">
+                    <div class="section-title mb-0">
+                        <h4 class="m-0 text-uppercase font-weight-bold">Advertisement</h4>
+                    </div>
+                    <div class="bg-white text-center border border-top-0 p-3">
+                        <a href=""><img class="img-fluid" src="{% static 'img/news-800x500-2.jpg' %}" alt=""></a>
+                    </div>
+                </div>
+                <!-- Ads End -->
+                <!-- Newsletter Start -->
+                <div class="mb-3">
+                    <div class="section-title mb-0">
+                        <h4 class="m-0 text-uppercase font-weight-bold">Newsletter</h4>
+                    </div>
+                    <div class="bg-white text-center border border-top-0 p-3">
+                        <p>Aliqu justo et labore at eirmod justo sea erat diam dolor diam vero kasd</p>
+                        <div class="input-group mb-2" style="width: 100%;">
+                            <input type="text" class="form-control form-control-lg" placeholder="Your Email">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary font-weight-bold px-3">Sign Up</button>
+                            </div>
+                        </div>
+                        <small>Lorem ipsum dolor sit amet elit</small>
+                    </div>
+                </div>
+                <!-- Newsletter End -->
+
+                <!-- Tags Start -->
+            <div class="mb-3">
+                <div class="section-title mb-0">
+                    <h4 class="m-0 text-uppercase font-weight-bold">Tags</h4>
+                </div>
+                <div class="bg-white border border-top-0 p-3">
+                    <div class="row">
+                        {% for tags in categories %}
+                        <div class="col-4 mb-2">  <!-- Adjust the column size as needed -->
+                            <a href="{{tags.get_url}}" class="btn btn-sm btn-outline-secondary w-100">{{tags.name|truncatechars:10}}</a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <!-- Tags End -->
+            </div>
+        </div>
+       
+    </div>
+</div>
+<!-- News With Sidebar End -->
+  
+{% endblock %}

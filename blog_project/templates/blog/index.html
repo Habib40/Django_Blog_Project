@@ -1,0 +1,307 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+   <!-- Main News Slider Start -->
+   <div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-7 px-0">
+            <div class="owl-carousel main-carousel position-relative">
+                {% for news in articles|slice:":10" %}
+                    <div class="position-relative overflow-hidden" style="height: 500px;">
+                        <img class="img-fluid h-100" src="{{ news.image.url }}" style="object-fit: cover;">
+                        <div class="overlay">
+                            <div class="mb-2">
+                                <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
+                                   href="">{{ news.category.name }}</a>  <!-- Display the category for the article -->
+                                <a class="text-white" href="">{{ news.published_date|date:"M d, Y" }}</a>  <!-- Use the article's date -->
+                            </div>
+                            <a class="h2 m-0 text-white text-uppercase font-weight-bold" href="{{news.get_url}}">{{ news.title|truncatechars:60 }}</a>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% if not articles %}
+                    <div class="position-relative overflow-hidden" style="height: 500px;">
+                        <div class="overlay">
+                            <a class="h2 m-0 text-white text-uppercase font-weight-bold" href="">Articles Not Found...</a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-lg-5 px-0">
+            <div class="row mx-0">
+                {% for news in articles|slice:":4" %}  <!-- Limit to the first 4 articles -->
+                    <div class="col-md-6 px-0">
+                        <div class="position-relative overflow-hidden" style="height: 250px;">
+                            <img class="img-fluid w-100 h-100" src="{{ news.image.url }}" style="object-fit: cover;">
+                            <div class="overlay">
+                                <div class="mb-2">
+                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
+                                       href="">{{ news.category.name }}</a>
+                                    <a class="text-white" href="">{{ news.published_date|date:"M d, Y" }}</a>
+                                </div>
+                                <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="{{news.get_url}}">{{ news.title|truncatechars:40 }}</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Main News Slider End -->
+
+
+    <!-- Breaking News Start -->
+   <div class="container-fluid bg-dark py-3 mb-3">
+    <div class="container">
+        <div class="row align-items-center bg-dark">
+            <div class="col-12">
+                <div class="d-flex justify-content-between">
+                    <div class="bg-primary text-dark text-center font-weight-medium py-2" style="width: 170px;">Breaking News</div>
+                    <div class="owl-carousel tranding-carousel position-relative d-inline-flex align-items-center ml-3"
+                         style="width: calc(100% - 170px); padding-right: 90px;">
+                        {% for news in articles %}
+                            <div class="text-truncate"><a class="text-white text-uppercase font-weight-semi-bold" href="{{news.get_url}}">{{ news.title }}</a></div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breaking News End -->
+
+    <!-- Featured News Slider Start -->
+    <div class="container-fluid pt-5 mb-3">
+        <div class="container">
+            <div class="section-title">
+                <h4 class="m-0 text-uppercase font-weight-bold">Featured News</h4>
+            </div>
+            <div class="owl-carousel news-carousel carousel-item-4 position-relative">
+                {% for news in articles %}
+                <div class="position-relative overflow-hidden" style="height: 300px;">
+                    <img class="img-fluid h-100" src="{{ news.image.url }}" style="object-fit:cover;">
+                    <div class="overlay">
+                        <div class="mb-2">
+                            <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
+                                href="#">{{ news.category.name }}</a>
+                            <a class="text-white" href=""><small>{{ news.published_date|date:"M d, Y" }}</small></a>
+                        </div>
+                        <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="{{news.get_url}}">{{ news.title|truncatechars:30 }}</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- Featured News Slider End -->
+
+
+    <!-- News With Sidebar Start -->
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="section-title">
+                                <h4 class="m-0 text-uppercase font-weight-bold">Latest News</h4>
+                                <a class="text-secondary font-weight-medium text-decoration-none" href="{% url 'article_list' %}">View All</a>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-12 mb-3">
+                            <a href=""><img class="img-fluid w-100" src="{% static 'img/ads-728x90.png' %}" alt=""></a>
+                        </div>
+
+                        
+                            
+                                {% for news in latest_articles %}
+                                <div class="col-lg-6">
+                                    <div class="position-relative mb-3">
+                                        <img src="{{ news.image.url }}" alt="{{ news.title }}" width="100%" height="320" style="object-fit: cover;">
+                                        <div class="bg-white border border-top-0 p-4">
+                                            <div class="mb-2">
+                                                <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="">{{ news.category.name }}</a>
+                                                <a class="text-body" href=""><small>{{ news.published_date|date:"M d, Y" }}</small></a>
+                                            </div>
+                                            <a class="h4 d-block mb-0 text-secondary text-uppercase font-weight-bold" href="{{news.get_url}}">{{ news.title|truncatechars:30 }}</a>
+                                        </div>
+                                        <div class="d-flex justify-content-between bg-white border border-top-0 p-4">
+                                            <div class="d-flex align-items-center">
+                                                <img class="rounded-circle mr-2" src="img/user.jpg" width="25" height="25" alt="">
+                                                <small>John Doe</small>
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <small class="ml-3"><i class="far fa-eye mr-2"></i>12345</small>
+                                                <small class="ml-3"><i class="far fa-comment mr-2"></i>123</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                        
+                       
+                        <div class="col-lg-12 mb-3">
+                            <a href=""><img class="img-fluid w-100" src="{% static 'img/ads-728x90.png' %}" alt=""></a>
+                        </div>
+                       
+                        {% for news in articles %}
+                        <div class="col-lg-6 col-md-12 mb-2">
+                            <div class="d-flex align-items-start bg-white" style="height: 220px;">
+                                <img class="img-fluid ms-2" style="height: 110px; width: 120px; object-fit: cover;  margin: 10px; padding: 5px;" src="{{ news.image.url }}" alt="{{ news.title }}">
+                                <div class="w-100 h-100 px-3 d-flex flex-column justify-content-between border border-left-0">
+                                    <div class="mb-2">
+                                        <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1" style ="margin: 10px; padding: 5px;" href="">{{ news.category.name }}</a>
+                                        <a class="text-body" href=""><small>{{ news.published_date|date:"M d, Y" }}</small></a>
+                                    </div>
+                                    <a class="h6 text-secondary text-uppercase font-weight-bold title" href="{{news.get_url}}">
+                                    {{ news.title|truncatewords:30 }}{% if news.title|length > 30 %}{% endif %}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <!-- Social Follow Start -->
+                    <div class="mb-3">
+                        <div class="section-title mb-0">
+                            <h4 class="m-0 text-uppercase font-weight-bold">Follow Us</h4>
+                        </div>
+                        <div class="bg-white border border-top-0 p-3">
+                            <a href="" class="d-block w-100 text-white text-decoration-none mb-3" style="background: #39569E;">
+                                <i class="fab fa-facebook-f text-center py-4 mr-3" style="width: 65px; background: rgba(0, 0, 0, .2);"></i>
+                                <span class="font-weight-medium">12,345 Fans</span>
+                            </a>
+                            <a href="" class="d-block w-100 text-white text-decoration-none mb-3" style="background: #52AAF4;">
+                                <i class="fab fa-twitter text-center py-4 mr-3" style="width: 65px; background: rgba(0, 0, 0, .2);"></i>
+                                <span class="font-weight-medium">12,345 Followers</span>
+                            </a>
+                            <a href="" class="d-block w-100 text-white text-decoration-none mb-3" style="background: #0185AE;">
+                                <i class="fab fa-linkedin-in text-center py-4 mr-3" style="width: 65px; background: rgba(0, 0, 0, .2);"></i>
+                                <span class="font-weight-medium">12,345 Connects</span>
+                            </a>
+                            <a href="" class="d-block w-100 text-white text-decoration-none mb-3" style="background: #C8359D;">
+                                <i class="fab fa-instagram text-center py-4 mr-3" style="width: 65px; background: rgba(0, 0, 0, .2);"></i>
+                                <span class="font-weight-medium">12,345 Followers</span>
+                            </a>
+                            <a href="" class="d-block w-100 text-white text-decoration-none mb-3" style="background: #DC472E;">
+                                <i class="fab fa-youtube text-center py-4 mr-3" style="width: 65px; background: rgba(0, 0, 0, .2);"></i>
+                                <span class="font-weight-medium">12,345 Subscribers</span>
+                            </a>
+                            <a href="" class="d-block w-100 text-white text-decoration-none" style="background: #055570;">
+                                <i class="fab fa-vimeo-v text-center py-4 mr-3" style="width: 65px; background: rgba(0, 0, 0, .2);"></i>
+                                <span class="font-weight-medium">12,345 Followers</span>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Social Follow End -->
+
+                    <!-- Ads Start -->
+                    <div class="mb-3">
+                        <div class="section-title mb-0">
+                            <h4 class="m-0 text-uppercase font-weight-bold">Advertisement</h4>
+                        </div>
+                        <div class="bg-white text-center border border-top-0 p-3">
+                            <a href=""><img class="img-fluid" src="{% static 'img/news-800x500-2.jpg' %}" alt=""></a>
+                        </div>
+                    </div>
+                    <!-- Ads End -->
+                <div class="mb-3">
+                    <div class="section-title mb-0">
+                        <h4 class="m-0 text-uppercase font-weight-bold">Trending News</h4>
+                    </div>
+                     <div class="bg-white border border-top-0 p-3">
+                        {% for article in trending_articles %}
+                            <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
+                                <img class="img-fluid" src="{{ article.image.url }}" alt="{{ article.title }}" style="width: 110px; height: auto;">
+                                <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
+                                    <div class="mb-2">
+                                        <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">{{ article.category.name }}</a>
+                                        <a class="text-body" href="#"><small>{{ article.published_date|date:"M d, Y" }}</small></a>
+                                    </div>
+                                    <a class="h6 m-0 text-secondary text-uppercase font-weight-bold" href="{{article.get_url}}">{{ article.title|truncatechars:30 }}</a> <!-- Limit to 30 characters -->
+                                </div>
+                            </div>
+                        {% empty %}
+                            <p class="text-muted">No trending articles available.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- Trending News End -->
+
+             <!-- Newsletter Start -->
+             <div class="mb-3">
+                <div class="section-title mb-0">
+                    <h4 class="m-0 text-uppercase font-weight-bold">Newsletter</h4>
+                </div>
+                <div class="bg-white text-center border border-top-0 p-3">
+                    <p class="text-dark">Please Subscribe to get our newsletters</p>
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <div class="input-group mb-2" style="width: 100%;">
+                            {{ form.email }}  <!-- Renders the email input with Bootstrap classes -->
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary font-weight-bold px-3">Sign Up</button>
+                            </div>
+                        </div>
+                
+                        <!-- Display validation errors for the email field -->
+                        {% if form.email.errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form.email.errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </form>
+                    <small>
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-info">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    </small>
+                </div>
+            </div>
+            <!-- Newsletter End -->
+
+
+            <!-- Tags Start -->
+            <div class="mb-3">
+                <div class="section-title mb-0">
+                    <h4 class="m-0 text-uppercase font-weight-bold">Tags</h4>
+                </div>
+                <div class="bg-white border border-top-0 p-3">
+                    <div class="row">
+                        {% for tags in categories %}
+                        <div class="col-4 mb-2">  <!-- Adjust the column size as needed -->
+                            <a href="{{tags.get_url}}" class="btn btn-sm btn-outline-secondary w-100">{{tags.name|truncatechars:10}}</a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <!-- Tags End -->
+ 
+
+            </div>
+            </div>
+            <!-- Trending News End -->
+             
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- News With Sidebar End -->
+
+
+      
+     {% endblock %}
